@@ -20,7 +20,8 @@ var gulp = require('gulp'),
   iconfont = require('gulp-iconfont'),
   iconfontcss = require('gulp-iconfont-css'),
   del = require('del'),
-  es = require('event-stream');
+  es = require('event-stream'),
+  spritesmith = require('gulp.spritesmith');
 
 var notifyError = function(err, lang) {
   console.log(err);
@@ -206,4 +207,12 @@ gulp.task('default', function () {
 
 gulp.task('build', function(callback) {
   runSequence('clean', 'html', 'sass-build', 'copy-assets', 'scripts-build', 'img-optim');
+});
+
+gulp.task('sprite', function () {
+  var spriteData = gulp.src('src/images/*.png').pipe(spritesmith({
+    imgName: 'sprite.png',
+    cssName: 'sprite.css'
+  }));
+  spriteData.pipe(gulp.dest('build/images/'));
 });
